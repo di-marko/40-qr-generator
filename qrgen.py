@@ -1,25 +1,36 @@
 import tkinter as tk
+from tkinter import filedialog
 import customtkinter as ctk
 from PIL import Image, ImageTk
 import qrcode
+try:
+    from ctypes import windll, byref, sizeof, c_int
+except:
+    pass
 
 class App(ctk.CTk):
     def __init__(self):
         # Main window setup
         ctk.set_appearance_mode("light")
         super().__init__(fg_color="white")
+        self.title_bar_style()
         
         # Customize the window
-        self.title("") # Sets the title of the window as an empty string
-        self.iconbitmap("empty.ico") # Sets the icon transparent
+        self.title("QRGen") # Sets the title of the window as an empty string
+        self.iconbitmap("img/logo.ico") # Sets the icon transparent
         self.geometry("400x400") # Set default window size
         
         # Input field
         self.input_string = ctk.StringVar()
         self.input_string.trace("w", self.create_qr)
-        InputField(self, self.input_string)
+        InputField(self, self.input_string, self.save_image)
+        
+        # Save button
+        self.bind("<Return>", self.save_image)
         
         # QR code
+        self.raw_image = None
+        self.tk_image = None
         self.qr_image = QRCodeImage(self)
         
         # Run the app
@@ -33,9 +44,25 @@ class App(ctk.CTk):
             self.qr_image.update_image(self.tk_image)
         else:
             self.qr_image.clear()
-        
+            self.raw_image = None
+            self.tk_image = None
+            
+    def save_image(self, event=""):
+        if self.raw_image:
+            file_path = filedialog.asksaveasfilename()
+            
+            if file_path:
+                self.raw_image.save(file_path + ".png")
+    
+    def title_bar_style(self):
+        try:
+            HWND = windll.user32.GetParent(self.winfo_id())
+            windll.dwmapi.DwmSetWindowAttribute(HWND, 35, byref(c_int(0x00FFFFFF)), sizeof(c_int))
+        except:
+            pass
+    
 class InputField(ctk.CTkFrame):
-    def __init__(self, parent, input_string):
+    def __init__(self, parent, input_string, save_btn):
         super().__init__(master=parent, corner_radius=0, fg_color="#1C1C1C")
         self.place(relx=0.5, rely=1, relwidth=1, relheight=0.4, anchor="center")
         
@@ -62,7 +89,8 @@ class InputField(ctk.CTkFrame):
         
         button = ctk.CTkButton(
             self.frame, 
-            text="Save QR", 
+            text="Save QR",
+            command=save_btn, 
             fg_color="#fff", 
             text_color="#1C1C1C", 
             corner_radius=0, 
