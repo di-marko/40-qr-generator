@@ -1,12 +1,15 @@
 # QR Code Generator (QRGen)
 
+<img src="img/logo.png" width="200" height="200">
+
 QRGen is a simple desktop application to generate and save QR codes. It's built with Python, using the tkinter and customtkinter libraries for the graphical user interface, and qrcode for generating QR codes.
-Features
+
+## Features
 
 - Generate QR codes from user input.
 - Save QR codes as PNG files.
 - Simple and minimalistic interface.
-- To view what is encoded in the QR Code, direct your phone camera onto the QR Code.
+> To view what is encoded in the QR Code, point your phone camera to the QR Code.
 
 ## Prerequisites
 
@@ -16,7 +19,7 @@ Before running the application, ensure you have Python installed on your system.
 - qrcode
 - customtkinter
 
-You can install these packages using pip:
+You can install these packages using pip or pip3 on mac:
 
 ```
 pip install Pillow qrcode customtkinter
