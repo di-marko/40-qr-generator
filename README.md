@@ -37,7 +37,8 @@ To run the application, follow these steps:
 python qrgen.py
 ```    
 
-The application window will open. Enter the text you want to convert into a QR code.
+The application window will open. Enter the text you want to convert into a QR code.<br>
+<img src="img/image.png" width="400" height="400">
 
 Click the **Save QR** button to save the generated QR code as a PNG file.
 
