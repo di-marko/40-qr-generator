@@ -1,0 +1,3 @@
+# Added for Github to properly identify the language of the project.
+* linguist-vendored
+*.py linguist-vendored=false
