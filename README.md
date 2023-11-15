@@ -1,6 +1,8 @@
 # QR Code Generator (QRGen)
 
-<img src="img/logo.png" width="200" height="200">
+![logo dark](img/logo_bl.png#gh-light-mode-only)
+![logo white](img/logo_wh.png#gh-dark-mode-only)
+
 
 QRGen is a simple desktop application to generate and save QR codes. It's built with Python, using the tkinter and customtkinter libraries for the graphical user interface, and qrcode for generating QR codes.
 
