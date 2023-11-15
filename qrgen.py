@@ -120,4 +120,5 @@ class QRCodeImage(tk.Canvas):
     def clear(self):
         self.delete("all")
         
-App()
+if __name__ == "__main__":
+    app = App()
