@@ -3,22 +3,24 @@ from tkinter import filedialog
 import customtkinter as ctk
 from PIL import Image, ImageTk
 import qrcode
-try:
-    from ctypes import windll, byref, sizeof, c_int
-except:
-    pass
+
+# Constants for styling
+FG_COLOR = "#1C1C1C"
+BG_COLOR = "#FFFFFF"
+HOVER_COLOR = "#F1F1F1"
 
 class App(ctk.CTk):
     def __init__(self):
         # Main window setup
         ctk.set_appearance_mode("light")
-        super().__init__(fg_color="white")
-        self.title_bar_style()
+        super().__init__(fg_color=BG_COLOR)
+        self.apply_custom_title_bar_style()
         
         # Customize the window
         self.title("QRGen") # Sets the title of the window as an empty string
         self.iconbitmap("img/logo.ico") # Sets the icon transparent
         self.geometry("400x400") # Set default window size
+        self.minsize(300,300)
         
         # Input field
         self.input_string = ctk.StringVar()
@@ -49,21 +51,25 @@ class App(ctk.CTk):
             
     def save_image(self, event=""):
         if self.raw_image:
-            file_path = filedialog.asksaveasfilename()
+            file_path = filedialog.asksaveasfilename(
+                defaultextension=".png",
+                filetypes=[("PNG files", "*.png"), ("All Files", "*.*")]
+            )
             
             if file_path:
-                self.raw_image.save(file_path + ".png")
+                self.raw_image.save(file_path)
     
-    def title_bar_style(self):
+    def apply_custom_title_bar_style(self):
         try:
+            from ctypes import windll, byref, sizeof, c_int
             HWND = windll.user32.GetParent(self.winfo_id())
             windll.dwmapi.DwmSetWindowAttribute(HWND, 35, byref(c_int(0x00FFFFFF)), sizeof(c_int))
-        except:
+        except ImportError:
             pass
     
 class InputField(ctk.CTkFrame):
     def __init__(self, parent, input_string, save_btn):
-        super().__init__(master=parent, corner_radius=0, fg_color="#1C1C1C")
+        super().__init__(master=parent, corner_radius=0, fg_color=FG_COLOR)
         self.place(relx=0.5, rely=1, relwidth=1, relheight=0.4, anchor="center")
         
         # Create grid layout
@@ -81,8 +87,8 @@ class InputField(ctk.CTkFrame):
         input_field = ctk.CTkEntry(
             self.frame, 
             textvariable=input_string, 
-            fg_color="#fff", 
-            text_color="#1C1C1C", 
+            fg_color=BG_COLOR,  
+            text_color=FG_COLOR,  
             corner_radius=0, 
             border_width=0)
         input_field.grid(row=0, column=1, sticky="nsew")
@@ -91,17 +97,17 @@ class InputField(ctk.CTkFrame):
             self.frame, 
             text="Save QR",
             command=save_btn, 
-            fg_color="#fff", 
-            text_color="#1C1C1C", 
+            fg_color=BG_COLOR, 
+            text_color=FG_COLOR, 
             corner_radius=0, 
-            hover_color="#f1f1f1")
+            hover_color=HOVER_COLOR)
         button.grid(row=0, column=2, sticky="nsew", padx=12)
         
 class QRCodeImage(tk.Canvas):
     def __init__(self, parent):
         super().__init__(
             master=parent, 
-            background="#fff", 
+            background=BG_COLOR, 
             bd=0, 
             highlightthickness=0, 
             relief="ridge")
